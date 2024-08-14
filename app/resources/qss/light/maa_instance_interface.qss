@@ -1,0 +1,20 @@
+MaaInstanceInterface, ToolBar, #view {
+    background-color: transparent;
+}
+
+QScrollArea {
+    border: none;
+}
+
+ToolBar > StrongBodyLabel {
+    color: black;
+}
+
+ToolBar > CaptionLabel {
+    color: rgb(95, 95, 95);
+}
+
+TitleLabel,
+StrongBodyLabel {
+    color: black;
+}

@@ -1,0 +1,20 @@
+MaaInstanceInterface,
+ToolBar,
+#view {
+    background-color: transparent;
+}
+
+QScrollArea {
+    border: none;
+}
+
+
+ToolBar>CaptionLabel {
+    color: white;
+}
+
+
+TitleLabel,
+StrongBodyLabel {
+    color: white;
+}
