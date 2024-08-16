@@ -4,6 +4,7 @@ from PySide6.QtWidgets import QApplication, QWidget
 from qfluentwidgets import FluentIcon as FIF
 from qfluentwidgets import FluentWindow, SplashScreen, NavigationItemPosition
 
+from app.common.resource_manager import resource
 from app.common.signal_bus import signalBus
 from app.view.home_interface import HomeInterface
 from app.view.maa_instance_interface import MaaInstanceInterface
@@ -33,12 +34,12 @@ class MainWindow(FluentWindow):
         self.setMinimumWidth(760)
 
         self.setWindowTitle('MaaAssistantArknights')
-        self.setWindowIcon(QIcon(':/images/maa_logo.png'))
+        self.setWindowIcon(QIcon(resource.getImg('gui_logo.png')))
 
         self.setMicaEffectEnabled(True)
 
         self.splashScreen = SplashScreen(self.windowIcon(), self)
-        self.splashScreen.setIconSize(QSize(106, 106))
+        self.splashScreen.setIconSize(QSize(250, 250))
         self.splashScreen.raise_()
 
         desktop = QApplication.screens()[0].availableGeometry()

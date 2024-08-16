@@ -2,6 +2,8 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QHBoxLayout
 from qfluentwidgets import MessageBoxBase, TitleLabel, BodyLabel, LineEdit, ComboBox, TransparentPushButton, FluentIcon
 
+from app.common.maa.emulators import Emulator
+
 
 class AddInstanceMessageBox(MessageBoxBase):
     def __init__(self, parent):
@@ -9,8 +11,8 @@ class AddInstanceMessageBox(MessageBoxBase):
         self.titleLabel = TitleLabel(self.tr('Add Instance'), self)
         self.addressLabel = BodyLabel(self.tr('Address'), self)
         self.addressInput = LineEdit(self)
-        self.simulatorLabel = BodyLabel(self.tr('Simulator'), self)
-        self.simulatorInput = ComboBox(self)
+        self.emulatorLabel = BodyLabel(self.tr('Emulator'), self)
+        self.emulatorInput = ComboBox(self)
         self.moreButton = TransparentPushButton(FluentIcon.CARE_DOWN_SOLID, self.tr('More'), self)
 
         self.addressLayout = QHBoxLayout()
@@ -18,14 +20,15 @@ class AddInstanceMessageBox(MessageBoxBase):
         self.moreLayout = QHBoxLayout()
 
         self.addressInput.setClearButtonEnabled(True)
-        simulators = [self.tr('MuMu Simulator')]
-        self.simulatorInput.addItems(simulators)
+        for emulator in Emulator:
+            value = emulator.value
+            self.emulatorInput.addItem(self.tr(value), Emulator.getIcon(value), value)
         self.moreButton.setLayoutDirection(Qt.RightToLeft)
 
         self.addressLayout.addWidget(self.addressLabel)
         self.addressLayout.addWidget(self.addressInput)
-        self.simulatorLayout.addWidget(self.simulatorLabel)
-        self.simulatorLayout.addWidget(self.simulatorInput)
+        self.simulatorLayout.addWidget(self.emulatorLabel)
+        self.simulatorLayout.addWidget(self.emulatorInput)
         self.moreLayout.addStretch(1)
         self.moreLayout.addWidget(self.moreButton, 0, Qt.AlignRight)
 

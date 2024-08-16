@@ -23,7 +23,10 @@ class SettingInterface:
         'Interface zoom': '界面缩放',
         'Change the size of widgets and fonts': '改变组件和字体的大小',
         'Updated successfully': '更新成功',
-        'Configuration takes effect after restart': '设置将在应用重启后生效'
+        'Configuration takes effect after restart': '设置将在应用重启后生效',
+        'Maa global settings': 'Maa全局设置',
+        'Choose folder': '选择文件夹',
+        'Maa default folder': 'Maa默认文件夹'
     }
 
 
@@ -31,9 +34,9 @@ class AddInstanceMessageBox:
     zh_CN = {
         'Add Instance': '添加实例',
         'Address': '连接地址',
-        'Simulator': '模拟器',
+        'Emulator': '模拟器',
         'More': '更多',
-        'MuMu Simulator': 'MuMu 模拟器'
+        'MuMu Emulator': 'MuMu 模拟器'
     }
 
 

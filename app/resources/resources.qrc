@@ -4,8 +4,11 @@
     <file>resources.qrc</file>
     <file>i18n\maa.zh_CN.qm</file>
     <file>i18n\maa.zh_CN.ts</file>
+    <file>images\gui_logo.png</file>
+    <file>images\gui_logo_alt.png</file>
     <file>images\home_header.png</file>
     <file>images\maa_logo.png</file>
+    <file>images\icon\mumu_emulator.ico</file>
     <file>qss\dark\home_interface.qss</file>
     <file>qss\dark\link_card.qss</file>
     <file>qss\dark\maa_instance_card.qss</file>

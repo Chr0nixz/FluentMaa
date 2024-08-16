@@ -25,14 +25,14 @@ If you're using PyCharm or terminal, you can use commands below:
 
 ```shell
 ./.venv/Scripts/activate
-python -m nuitka --standalone --mingw64 --windows-console-mode=disable --output-dir=out --show-progress --enable-plugin=pyside6 app/FluentMaa.py
+python -m nuitka --standalone --mingw64 --windows-console-mode=disable --windows-icon-from-ico=app/resources/images/icon/gui_icon.ico --output-dir=out --show-progress --enable-plugin=pyside6 app/FluentMaa.py
 ```
 
 or run this if you want build onefile:
 
 ```shell
 ./.venv/Scripts/activate
-python -m nuitka --standalone --onefile --mingw64 --windows-console-mode=disable --output-dir=out/onefile --show-progress --enable-plugin=pyside6 app/FluentMaa.py
+python -m nuitka --standalone --onefile --mingw64 --windows-console-mode=disable --windows-icon-from-ico=app/resources/images/icon/gui_icon.ico --output-dir=out --show-progress --enable-plugin=pyside6 app/FluentMaa.py
 ```
-
+This will also build standalone version
 (However, onefile is not recommended because it is prone to false alarms by antivirus software)

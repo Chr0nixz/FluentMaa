@@ -7,13 +7,18 @@ import dictionary
 
 language = 'zh_CN'
 
-lup_path = '../.venv/Scripts/pylupdate5.exe'
+lup_path = '../.venv/Scripts/pyside6-lupdate.exe'
+lre_path = '../.venv/Scripts/pyside6-lrelease.exe'
 
 scan_path = ['view']
 exclude = ['__init__.py', '__pycache__']
 
+check_translation = True
+
 ts_path = 'app/resources/i18n/maa.' + language + '.ts'
+qm_path = 'app/resources/i18n/maa.' + language + '.qm'
 temp_path = 'app/resources/i18n/temp.ts'
+
 
 root = etree.Element('TS')
 root.set('version', '2.1')
@@ -23,6 +28,7 @@ root.set('sourcelanguage', "en_US")
 path = os.getcwd()
 parent = os.path.dirname(path)
 ts_path = os.path.join(parent, ts_path)
+qm_path = os.path.join(parent, qm_path)
 temp_path = os.path.join(parent, temp_path)
 
 translation = dict()
@@ -39,7 +45,6 @@ for scan_file in scan_path:
 
         file = os.path.join(path, file)
         command = lup_path + ' ' + file + ' -ts ' + temp_path
-        print(command)
         subprocess.call(command)
 
         temp_root = etree.parse(temp_path)
@@ -55,8 +60,10 @@ for scan_file in scan_path:
                     child.text = text
                 else:
                     print('翻译为空:' + source)
+                    check_translation = False
             else:
                 print('无翻译:' + source)
+                check_translation = False
 
         root.append(context)
         os.remove(temp_path)
@@ -67,3 +74,9 @@ with open(ts_path, 'wb') as xml:
     head = '<?xml version="1.0" encoding="utf-8"?>\n<!DOCTYPE TS>\n'
     xml.write(head.encode('utf-8'))
     xml.write(etree.tostring(root, pretty_print=True, encoding="utf-8", xml_declaration=False))
+
+if check_translation:
+    command = lre_path + ' ' + ts_path + ' -qm ' + qm_path
+    subprocess.call(command)
+else:
+    print('Please use linguist to release.')

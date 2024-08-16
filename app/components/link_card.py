@@ -28,7 +28,7 @@ class LinkCard(QFrame):
 
         self.vBoxLayout = QVBoxLayout(self)
         self.vBoxLayout.setSpacing(0)
-        self.vBoxLayout.setContentsMargins(24, 24, 0, 13)
+        self.vBoxLayout.setContentsMargins(16, 24, 16, 13)
         self.vBoxLayout.addWidget(self.iconWidget)
         self.vBoxLayout.addSpacing(16)
         self.vBoxLayout.addWidget(self.titleLabel)

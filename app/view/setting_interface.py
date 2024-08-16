@@ -1,8 +1,8 @@
 from PySide6.QtCore import Qt
-from PySide6.QtWidgets import QWidget, QLabel
+from PySide6.QtWidgets import QWidget, QLabel, QFileDialog
+from qfluentwidgets import FluentIcon as FIF, PushSettingCard
 from qfluentwidgets import ScrollArea, ExpandLayout, SettingCardGroup, SwitchSettingCard, OptionsSettingCard, setTheme, \
-    ComboBoxSettingCard, InfoBar, CommandBar, FluentIcon, Action, CustomColorSettingCard
-from qfluentwidgets import FluentIcon as FIF
+    ComboBoxSettingCard, InfoBar, CustomColorSettingCard
 
 from app.common.config import cfg, isWin11
 from app.common.style_sheet import StyleSheet
@@ -20,6 +20,15 @@ class SettingInterface(ScrollArea):
         self.expandLayout = ExpandLayout(self.scrollWidget)
 
         self.settingLabel = QLabel(self.tr("Settings"), self)
+
+        self.maaGroup = SettingCardGroup(self.tr('Maa global settings'), self.scrollWidget)
+        self.maaFolderCard = PushSettingCard(
+            self.tr('Choose folder'),
+            FIF.FOLDER,
+            self.tr('Maa default folder'),
+            cfg.get(cfg.maaFolder),
+            self.maaGroup
+        )
 
         self.personalGroup = SettingCardGroup(self.tr('Personalization'), self.scrollWidget)
         self.micaCard = SwitchSettingCard(
@@ -87,6 +96,12 @@ class SettingInterface(ScrollArea):
     def __initLayout(self):
         self.settingLabel.move(36, 30)
 
+        self.themeCard.wheelEvent = self.scrollWidget.wheelEvent
+        self.themeColorCard.wheelEvent = self.scrollWidget.wheelEvent
+        self.zoomCard.wheelEvent = self.scrollWidget.wheelEvent
+
+        self.maaGroup.addSettingCard(self.maaFolderCard)
+
         self.personalGroup.addSettingCard(self.micaCard)
         self.personalGroup.addSettingCard(self.themeCard)
         self.personalGroup.addSettingCard(self.themeColorCard)
@@ -95,6 +110,7 @@ class SettingInterface(ScrollArea):
 
         self.expandLayout.setSpacing(28)
         self.expandLayout.setContentsMargins(36, 10, 36, 0)
+        self.expandLayout.addWidget(self.maaGroup)
         self.expandLayout.addWidget(self.personalGroup)
 
     def __showRestartTooltip(self):
@@ -105,6 +121,16 @@ class SettingInterface(ScrollArea):
             parent=self
         )
 
+    def __onMaaFolderCardClick(self):
+        folder = QFileDialog.getExistingDirectory(self, self.tr('Choose folder'), './')
+        if not folder or cfg.get(cfg.maaFolder) == folder:
+            return
+        cfg.set(cfg.maaFolder, folder)
+        self.maaFolderCard.setContent(folder)
+
     def __connectSignalToSlot(self):
         cfg.appRestartSig.connect(self.__showRestartTooltip)
+
+        self.maaFolderCard.clicked.connect(self.__onMaaFolderCardClick)
+
         self.themeCard.optionChanged.connect(lambda ci: setTheme(cfg.get(ci)))

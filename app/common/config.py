@@ -3,7 +3,7 @@ from enum import Enum
 
 from PySide6.QtCore import QLocale
 from qfluentwidgets import ConfigSerializer, QConfig, ConfigItem, BoolValidator, Theme, qconfig, OptionsConfigItem, \
-    OptionsValidator
+    OptionsValidator, FolderValidator
 
 
 class Language(Enum):
@@ -31,6 +31,7 @@ def isWin11():
 
 class Config(QConfig):
     """ 设置类 """
+    maaFolder = ConfigItem("Maa", "Folder", "./", FolderValidator())
     micaEnabled = ConfigItem("MainWindow", "MicaEnabled", isWin11(), BoolValidator())
     dpiScale = OptionsConfigItem(
         "MainWindow", "DpiScale", "Auto", OptionsValidator([1, 1.25, 1.5, 1.75, 2, "Auto"]), restart=True)
