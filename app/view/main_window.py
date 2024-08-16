@@ -4,6 +4,7 @@ from PySide6.QtWidgets import QApplication, QWidget
 from qfluentwidgets import FluentIcon as FIF
 from qfluentwidgets import FluentWindow, SplashScreen, NavigationItemPosition
 
+from app.common import windows_manager
 from app.common.resource_manager import resource
 from app.common.signal_bus import signalBus
 from app.view.home_interface import HomeInterface
@@ -16,6 +17,8 @@ class MainWindow(FluentWindow):
     def __init__(self):
         super().__init__()
         self.initWindow()
+
+        windows_manager.main_window = self
 
         self.homeInterface = HomeInterface(self)
         self.maaInstanceInterface = MaaInstanceInterface(self)

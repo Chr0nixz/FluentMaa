@@ -1,7 +1,8 @@
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QActionGroup
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
 from qfluentwidgets import TitleLabel, PushButton, FluentIcon, PrimaryPushButton, ScrollArea, FlowLayout, CommandBar, \
-    Action, LargeTitleLabel, InfoBar, InfoBarPosition
+    Action, LargeTitleLabel, InfoBar, InfoBarPosition, CheckableMenu, MenuIndicatorType, TransparentDropDownPushButton
 
 from app.common import windows_manager
 from app.common.maa.config.maa_config_manager import maaConfig
@@ -29,7 +30,8 @@ class ToolBar(QWidget):
         self.setFixedHeight(130)
 
         self.commandBar.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
-        self.commandBar.addAction(Action(FluentIcon.ADD, self.tr('Add'), triggered=self.addInstance))
+        self.commandBar.addAction(Action(FluentIcon.ADD, self.tr('Add'), triggered=self.parent().addInstance))
+        self.commandBar.addAction(Action(FluentIcon.SYNC, self.tr('Refresh'), triggered=self.parent().loadCards))
         self.commandBar.addSeparator()
         self.commandBar.addAction(Action(
             FluentIcon.EDIT,
@@ -37,6 +39,18 @@ class ToolBar(QWidget):
             checkable=True,
             triggered=self.switchEdit
         ))
+        self.commandBar.addSeparator()
+        self.cardLayoutAction = Action(FluentIcon.TILES, self.tr('Card'), checkable=True)
+        self.listLayoutAction = Action(FluentIcon.MENU, self.tr('List'), checkable=True)
+        self.layoutActionGroup = QActionGroup(self)
+        self.layoutActionGroup.addAction(self.cardLayoutAction)
+        self.layoutActionGroup.addAction(self.listLayoutAction)
+        self.cardLayoutAction.setChecked(True)
+        self.layoutMenu = CheckableMenu(parent=self, indicatorType=MenuIndicatorType.RADIO)
+        self.layoutMenu.addActions([self.cardLayoutAction, self.listLayoutAction])
+        self.layoutButton = TransparentDropDownPushButton(self.tr('Layout'), self, FluentIcon.LAYOUT)
+        self.layoutButton.setMenu(self.layoutMenu)
+        self.commandBar.addWidget(self.layoutButton)
 
         self.vBoxLayout.setSpacing(0)
         self.vBoxLayout.setContentsMargins(36, 20, 36, 12)
@@ -45,12 +59,6 @@ class ToolBar(QWidget):
         self.vBoxLayout.addWidget(self.commandBar, 1)
         self.vBoxLayout.setAlignment(Qt.AlignTop)
 
-    def addInstance(self):
-        w = AddInstanceMessageBox(windows_manager.main_window)
-        if w.exec():
-            connection = ConnectionConfig(address=w.addressInput.text(), emulator=w.emulatorInput.currentData())
-            maaConfig.addInstance(InstanceConfig(connection))
-            self.parent().loadCards()
 
     def switchEdit(self):
         if self.editing:
@@ -90,17 +98,28 @@ class MaaInstanceInterface(ScrollArea):
         self.vBoxLayout.setAlignment(Qt.AlignTop)
         self.vBoxLayout.setContentsMargins(30, 20, 30, 36)
 
+    def addInstance(self):
+        w = AddInstanceMessageBox(windows_manager.main_window)
+        if w.exec():
+            connection = ConnectionConfig(address=w.addressInput.text(), emulator=w.emulatorInput.currentData())
+            self.loadCard(maaConfig.addInstance(InstanceConfig(name=w.nameInput.text(), connection=connection)))
+
     def loadCards(self):
         if hasattr(self, 'maaInstanceCardView'):
             self.vBoxLayout.removeWidget(self.maaInstanceCardView)
             self.maaInstanceCardView.setParent(None)
             self.maaInstanceCardView.deleteLater()
         self.maaInstanceCardView = MaaInstanceCardView(self)
-        self.parent().stackedWidget.currentChanged.connect(self.maaInstanceCardView.update)
+        windows_manager.main_window.stackedWidget.currentChanged.connect(self.maaInstanceCardView.update)
         for instance in maaConfig.getInstances().items():
             self.maaInstanceCardView.addCard(MaaInstanceCard(self, instance[0], instance[1]))
         self.vBoxLayout.addWidget(self.maaInstanceCardView)
         self.vBoxLayout.update()
+        self.selectedCards.clear()
+
+    def loadCard(self, instance: dict):
+        self.maaInstanceCardView.addCard(MaaInstanceCard(self, instance[0], instance[1]))
+        self.maaInstanceCardView.update()
 
     def selectCard(self, card):
         if self.toolBar.editing:
@@ -113,8 +132,8 @@ class MaaInstanceInterface(ScrollArea):
                 self.selectedCards.append(card)
         w = InfoBar.info(
             title=self.tr('Current Selection'),
-            content=self.tr('Instance: ') + str(card),
-            orient = Qt.Horizontal,
+            content=self.tr('Instance ') + str(card),
+            orient=Qt.Horizontal,
             isClosable=True,
             position=InfoBarPosition.BOTTOM_LEFT,
             duration=2000,

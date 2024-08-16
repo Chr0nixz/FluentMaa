@@ -3,29 +3,34 @@
 <TS version="2.1" language="zh_CN" sourcelanguage="en_US"><context>
     <name>AddInstanceMessageBox</name>
     <message>
-        <location filename="../../view/add_instance_message_box.py" line="9"/>
+        <location filename="../../view/add_instance_message_box.py" line="11"/>
         <source>Add Instance</source>
         <translation>添加实例</translation>
     </message>
     <message>
-        <location filename="../../view/add_instance_message_box.py" line="10"/>
+        <location filename="../../view/add_instance_message_box.py" line="12"/>
+        <source>Name</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../view/add_instance_message_box.py" line="14"/>
         <source>Address</source>
         <translation>连接地址</translation>
     </message>
     <message>
-        <location filename="../../view/add_instance_message_box.py" line="12"/>
+        <location filename="../../view/add_instance_message_box.py" line="16"/>
         <source>Emulator</source>
         <translation>模拟器</translation>
     </message>
     <message>
-        <location filename="../../view/add_instance_message_box.py" line="14"/>
+        <location filename="../../view/add_instance_message_box.py" line="18"/>
         <source>More</source>
         <translation>更多</translation>
     </message>
     <message>
-        <location filename="../../view/add_instance_message_box.py" line="22"/>
-        <source>MuMu Emulator</source>
-        <translation>MuMu 模拟器</translation>
+        <location filename="../../view/add_instance_message_box.py" line="25"/>
+        <source>Optional, default emulator's name</source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
@@ -52,37 +57,55 @@
     </message>
 </context>
 <context>
-    <name>ToolBar</name>
+    <name>InstanceDetailMessageBox</name>
     <message>
-        <location filename="../../view/maa_instance_interface.py" line="16"/>
-        <source>MAA Instances</source>
-        <translation>MAA实例</translation>
+        <location filename="../../view/instance_detail_message_box.py" line="13"/>
+        <source>Instance Settings</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../view/maa_instance_interface.py" line="28"/>
-        <source>Add</source>
-        <translation>添加</translation>
+        <location filename="../../view/instance_detail_message_box.py" line="14"/>
+        <source>Name</source>
+        <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../view/maa_instance_interface.py" line="30"/>
-        <source>Edit</source>
-        <translation>编辑</translation>
+        <location filename="../../view/instance_detail_message_box.py" line="16"/>
+        <source>Address</source>
+        <translation>连接地址</translation>
+    </message>
+    <message>
+        <location filename="../../view/instance_detail_message_box.py" line="18"/>
+        <source>Emulator</source>
+        <translation>模拟器</translation>
+    </message>
+</context>
+<context>
+    <name>MaaInstanceInterface</name>
+    <message>
+        <location filename="../../view/maa_instance_interface.py" line="134"/>
+        <source>Current Selection</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../view/maa_instance_interface.py" line="135"/>
+        <source>Instance </source>
+        <translation type="unfinished"/>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../view/main_window.py" line="52"/>
+        <location filename="../../view/main_window.py" line="55"/>
         <source>Home</source>
         <translation>主页</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="56"/>
+        <location filename="../../view/main_window.py" line="59"/>
         <source>Instances</source>
         <translation>实例列表</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="58"/>
+        <location filename="../../view/main_window.py" line="61"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
@@ -101,7 +124,7 @@
     </message>
     <message>
         <location filename="../../view/setting_interface.py" line="26"/>
-        <location filename="../../view/setting_interface.py" line="121"/>
+        <location filename="../../view/setting_interface.py" line="125"/>
         <source>Choose folder</source>
         <translation>选择文件夹</translation>
     </message>
@@ -183,12 +206,12 @@
         <translation>选择界面所使用的语言</translation>
     </message>
     <message>
-        <location filename="../../view/setting_interface.py" line="114"/>
+        <location filename="../../view/setting_interface.py" line="118"/>
         <source>Updated successfully</source>
         <translation>更新成功</translation>
     </message>
     <message>
-        <location filename="../../view/setting_interface.py" line="115"/>
+        <location filename="../../view/setting_interface.py" line="119"/>
         <source>Configuration takes effect after restart</source>
         <translation>设置将在应用重启后生效</translation>
     </message>

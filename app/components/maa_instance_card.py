@@ -2,7 +2,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QFrame, QLabel, QVBoxLayout, QHBoxLayout, QWidget
 from qfluentwidgets import IconWidget, ToolButton, FluentIcon, FlowLayout, PrimaryToolButton, Dialog, InfoBar, \
-    InfoBarPosition
+    InfoBarPosition, ElevatedCardWidget
 
 from app.common import windows_manager
 from app.common.config import cfg
@@ -10,9 +10,10 @@ from app.common.maa.config.maa_config_manager import maaConfig
 from app.common.maa.emulators import Emulator
 from app.common.resource_manager import resource
 from app.common.style_sheet import StyleSheet
+from app.view.instance_detail_message_box import InstanceDetailMessageBox
 
 
-class MaaInstanceCard(QFrame):
+class MaaInstanceCard(ElevatedCardWidget):
     def __init__(self, interface, instance_id: int, instance_config: dict):
         super().__init__()
         self.interface = interface
@@ -20,6 +21,7 @@ class MaaInstanceCard(QFrame):
         self.id = instance_id
         self.config = instance_config
 
+        self.name = self.config['name']
         self.emulator = self.config['connection']['emulator']
         self.address = self.config['connection']['address']
         self.status = 'Stop'
@@ -32,7 +34,7 @@ class MaaInstanceCard(QFrame):
             Emulator.getIcon(self.emulator, default=QIcon(resource.getImg('maa_logo.png'))),
             parent=self
         )
-        self.titleLabel = QLabel(self.emulator, self)
+        self.titleLabel = QLabel(self.name, self)
         content = f'{self.tr('Address')}: {self.address}\n{self.tr('Status')}: {self.status}\n'
         if not self.warnings:
             content += self.tr('No warning')
@@ -107,6 +109,9 @@ class MaaInstanceCard(QFrame):
         self.interface.selectCard(self)
 
     def clickSelected(self):
+        w = InstanceDetailMessageBox(windows_manager.main_window, self.config)
+        if w.exec():
+            pass
         self.parent().update()
 
     def unselect(self):
@@ -120,7 +125,7 @@ class MaaInstanceCard(QFrame):
         self.deleteLater()
 
     def __str__(self):
-        return self.tr(self.emulator) + ' ' + self.address
+        return self.name + ': ' + self.address
 
 
 class MaaInstanceCardView(QWidget):

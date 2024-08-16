@@ -3,11 +3,10 @@ import sys
 
 from PySide6.QtCore import Qt, QTranslator
 from PySide6.QtWidgets import QApplication
+from qfluentwidgets import FluentTranslator
 
-from app.common import windows_manager
 from app.common.config import cfg
 from app.view.main_window import MainWindow
-from qfluentwidgets import FluentTranslator
 
 if cfg.get(cfg.dpiScale) != "Auto":
     os.environ["QT_ENABLE_HIGHDPI_SCALING"] = "0"
@@ -21,15 +20,13 @@ if sys.platform == 'win32' and sys.getwindowsversion().build >= 22000:
 
 locale = cfg.get(cfg.language).value
 translator = FluentTranslator(locale)
-galleryTranslator = QTranslator()
-galleryTranslator.load(locale, "maa", ".", ":/i18n")
+maaTranslator = QTranslator()
+maaTranslator.load(locale, "maa", ".", ":/i18n")
 
 app.installTranslator(translator)
-app.installTranslator(galleryTranslator)
+app.installTranslator(maaTranslator)
 
 w = MainWindow()
 w.show()
-
-windows_manager.main_window = w
 
 app.exec()
