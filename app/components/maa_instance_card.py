@@ -1,4 +1,4 @@
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QEasingCurve
 from PySide6.QtGui import QIcon
 from PySide6.QtWidgets import QFrame, QLabel, QVBoxLayout, QHBoxLayout, QWidget
 from qfluentwidgets import IconWidget, ToolButton, FluentIcon, FlowLayout, PrimaryToolButton, Dialog, InfoBar, \
@@ -8,22 +8,19 @@ from app.common import windows_manager
 from app.common.config import cfg
 from app.common.maa.config.maa_config_manager import maaConfig
 from app.common.maa.emulators import Emulator
+from app.common.maa.maa_instance import MaaInstance
+from app.common.maa.maa_instance_manager import maaInstanceManager
 from app.common.resource_manager import resource
 from app.common.style_sheet import StyleSheet
 from app.view.instance_detail_message_box import InstanceDetailMessageBox
 
 
 class MaaInstanceCard(ElevatedCardWidget):
-    def __init__(self, interface, instance_id: int, instance_config: dict):
+    def __init__(self, interface, instance: MaaInstance):
         super().__init__()
         self.interface = interface
+        self.instance = instance
 
-        self.id = instance_id
-        self.config = instance_config
-
-        self.name = self.config['name']
-        self.emulator = self.config['connection']['emulator']
-        self.address = self.config['connection']['address']
         self.status = 'Stop'
         self.warnings = []
         self.view = None
@@ -31,11 +28,11 @@ class MaaInstanceCard(ElevatedCardWidget):
 
         self.setFixedSize(240, 300)
         self.iconWidget = IconWidget(
-            Emulator.getIcon(self.emulator, default=QIcon(resource.getImg('maa_logo.png'))),
+            Emulator.getIcon(self.instance.connection.emulator, default=QIcon(resource.getImg('maa_logo.png'))),
             parent=self
         )
-        self.titleLabel = QLabel(self.name, self)
-        content = f'{self.tr('Address')}: {self.address}\n{self.tr('Status')}: {self.status}\n'
+        self.titleLabel = QLabel(self.instance.name, self)
+        content = f'{self.tr('Address')}: {self.instance.connection.address}\n{self.tr('Status')}: {self.status}\n'
         if not self.warnings:
             content += self.tr('No warning')
         self.contentLabel = QLabel(content, self)
@@ -69,13 +66,13 @@ class MaaInstanceCard(ElevatedCardWidget):
         self.vBoxLayout.addLayout(self.buttonLayout, 1)
 
         self.buttonLayout.setSpacing(4)
-        self.buttonLayout.addWidget(self.startButton, 0, Qt.AlignLeft)
-        self.buttonLayout.addWidget(self.stopButton, 0, Qt.AlignLeft)
+        self.buttonLayout.addWidget(self.startButton, 0, Qt.AlignmentFlag.AlignLeft)
+        self.buttonLayout.addWidget(self.stopButton, 0, Qt.AlignmentFlag.AlignLeft)
         self.buttonLayout.addStretch(3)
-        self.buttonLayout.addWidget(self.removeButton, 0, Qt.AlignRight)
+        self.buttonLayout.addWidget(self.removeButton, 0, Qt.AlignmentFlag.AlignRight)
         self.buttonLayout.addStretch(1)
-        self.buttonLayout.addWidget(self.detailWidget, 0, Qt.AlignRight)
-        self.vBoxLayout.setAlignment(Qt.AlignLeft | Qt.AlignTop)
+        self.buttonLayout.addWidget(self.detailWidget, 0, Qt.AlignmentFlag.AlignRight)
+        self.vBoxLayout.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignTop)
 
         self.titleLabel.setObjectName('titleLabel')
         self.contentLabel.setObjectName('contentLabel')
@@ -109,7 +106,7 @@ class MaaInstanceCard(ElevatedCardWidget):
         self.interface.selectCard(self)
 
     def clickSelected(self):
-        w = InstanceDetailMessageBox(windows_manager.main_window, self.config)
+        w = InstanceDetailMessageBox(windows_manager.main_window, self.instance)
         if w.exec():
             pass
         self.parent().update()
@@ -120,19 +117,19 @@ class MaaInstanceCard(ElevatedCardWidget):
 
     def remove(self):
         self.parent().removeCard(self)
-        maaConfig.removeInstance(self.id)
+        maaInstanceManager.removeInstance(self.instance.uid)
         self.setParent(None)
         self.deleteLater()
 
     def __str__(self):
-        return self.name + ': ' + self.address
+        return self.instance.name + ': ' + self.instance.connection.address
 
 
 class MaaInstanceCardView(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.flowLayout = FlowLayout(self, True)
+        self.flowLayout = FlowLayout(self)
 
         self.flowLayout.setContentsMargins(20, 10, 20, 20)
         self.flowLayout.setVerticalSpacing(20)

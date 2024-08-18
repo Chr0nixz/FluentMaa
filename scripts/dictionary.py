@@ -1,7 +1,8 @@
 class MainWindow:
     zh_CN = {
         'Home': '主页',
-        'Instances': '实例列表'
+        'Instances': '实例列表',
+        'Basic Task': '基本任务'
     }
 
 
@@ -36,7 +37,9 @@ class AddInstanceMessageBox:
         'Address': '连接地址',
         'Emulator': '模拟器',
         'More': '更多',
-        'MuMu Emulator': 'MuMu 模拟器'
+        'MuMu Emulator': 'MuMu 模拟器',
+        'Name': '名称',
+        'Optional, default emulator\'s name': '可选，默认为模拟器名称'
     }
 
 
@@ -51,7 +54,29 @@ class HomeInterface:
 class MaaInstanceInterface:
     zh_CN = {
         'Add': '添加',
-        'Edit': '编辑'
+        'Edit': '编辑',
+        'Current Selection': '当前选择',
+        'Instance': '实例',
+        'Refresh': '刷新',
+        'Card': '卡片',
+        'List': '列表',
+        'Layout': '布局'
+    }
+
+
+class InstanceDetailMessageBox:
+    zh_CN = {
+        'Instance Settings': '实例设置'
+    }
+
+
+class TaskInterface:
+    zh_CN = {
+        'No selected instance': '没有选择实例',
+        'Click OK to switch to the instance interface to select one.': '点击确认跳转到实例管理界面选择。',
+        'StartUp': '开始唤醒',
+        'Fight': '自动作战',
+        'Current instance': '当前实例',
     }
 
 
@@ -59,4 +84,6 @@ zh_CN = dict(MainWindow.zh_CN.items() |
              SettingInterface.zh_CN.items() |
              AddInstanceMessageBox.zh_CN.items() |
              HomeInterface.zh_CN.items() |
-             MaaInstanceInterface.zh_CN.items())
+             MaaInstanceInterface.zh_CN.items() |
+             InstanceDetailMessageBox.zh_CN.items() |
+             TaskInterface.zh_CN.items())

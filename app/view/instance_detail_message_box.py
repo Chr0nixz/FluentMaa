@@ -3,12 +3,13 @@ from PySide6.QtWidgets import QHBoxLayout
 from qfluentwidgets import MessageBoxBase, TitleLabel, BodyLabel, LineEdit, TransparentPushButton, ComboBox, FluentIcon
 
 from app.common.maa.emulators import Emulator
+from app.common.maa.maa_instance import MaaInstance
 
 
 class InstanceDetailMessageBox(MessageBoxBase):
-    def __init__(self, parent, instance_config: dict):
+    def __init__(self, parent, instance: MaaInstance):
         super().__init__(parent)
-        self.config = instance_config
+        self.instance = instance
 
         self.titleLabel = TitleLabel(self.tr('Instance Settings'), self)
         self.nameLabel = BodyLabel(self.tr('Name'), self)
@@ -22,8 +23,8 @@ class InstanceDetailMessageBox(MessageBoxBase):
         self.addressLayout = QHBoxLayout()
         self.simulatorLayout = QHBoxLayout()
 
-        self.nameInput.setText(self.config['name'])
-        self.addressInput.setText(self.config['connection']['address'])
+        self.nameInput.setText(self.instance.name)
+        self.addressInput.setText(self.instance.connection.address)
 
         self.addressInput.setClearButtonEnabled(True)
         self.addressInput.setPlaceholderText('127.0.0.1:16384')

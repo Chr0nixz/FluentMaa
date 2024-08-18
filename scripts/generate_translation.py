@@ -45,27 +45,28 @@ for scan_file in scan_path:
 
         file = os.path.join(path, file)
         command = lup_path + ' ' + file + ' -ts ' + temp_path
+        print(command)
         subprocess.call(command)
 
         temp_root = etree.parse(temp_path)
-        context = temp_root.find('context')
+        contexts = temp_root.findall('context')
 
-        for message in context.findall('message'):
-            source = message.find('source').text
-            if source in translation:
-                text = translation.get(source)
-                if text:
-                    child = message.find('translation')
-                    child.attrib.pop('type', None)
-                    child.text = text
+        for context in contexts:
+            for message in context.findall('message'):
+                source = message.find('source').text
+                if source in translation:
+                    text = translation.get(source)
+                    if text:
+                        child = message.find('translation')
+                        child.attrib.pop('type', None)
+                        child.text = text
+                    else:
+                        print('翻译为空:' + source)
+                        check_translation = False
                 else:
-                    print('翻译为空:' + source)
+                    print('无翻译:' + source)
                     check_translation = False
-            else:
-                print('无翻译:' + source)
-                check_translation = False
-
-        root.append(context)
+            root.append(context)
         os.remove(temp_path)
 
 os.remove(ts_path)

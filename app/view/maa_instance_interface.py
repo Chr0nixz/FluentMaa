@@ -1,13 +1,12 @@
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QActionGroup
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout
-from qfluentwidgets import TitleLabel, PushButton, FluentIcon, PrimaryPushButton, ScrollArea, FlowLayout, CommandBar, \
+from PySide6.QtWidgets import QWidget, QVBoxLayout
+from qfluentwidgets import FluentIcon, ScrollArea, CommandBar, \
     Action, LargeTitleLabel, InfoBar, InfoBarPosition, CheckableMenu, MenuIndicatorType, TransparentDropDownPushButton
 
 from app.common import windows_manager
-from app.common.maa.config.maa_config_manager import maaConfig
-from app.common.maa.config.maa_connection_config import ConnectionConfig
-from app.common.maa.config.maa_instance_config import InstanceConfig
+from app.common.maa.maa_instance import MaaInstance
+from app.common.maa.maa_instance_manager import maaInstanceManager
 from app.common.style_sheet import StyleSheet
 from app.components.maa_instance_card import MaaInstanceCard, MaaInstanceCardView
 from app.view.add_instance_message_box import AddInstanceMessageBox
@@ -57,7 +56,7 @@ class ToolBar(QWidget):
         self.vBoxLayout.addWidget(self.titleLabel)
         self.vBoxLayout.addSpacing(16)
         self.vBoxLayout.addWidget(self.commandBar, 1)
-        self.vBoxLayout.setAlignment(Qt.AlignTop)
+        self.vBoxLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
 
     def switchEdit(self):
@@ -95,14 +94,15 @@ class MaaInstanceInterface(ScrollArea):
         self.setWidgetResizable(True)
 
         self.vBoxLayout.setSpacing(30)
-        self.vBoxLayout.setAlignment(Qt.AlignTop)
+        self.vBoxLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
         self.vBoxLayout.setContentsMargins(30, 20, 30, 36)
 
     def addInstance(self):
         w = AddInstanceMessageBox(windows_manager.main_window)
         if w.exec():
-            connection = ConnectionConfig(address=w.addressInput.text(), emulator=w.emulatorInput.currentData())
-            self.loadCard(maaConfig.addInstance(InstanceConfig(name=w.nameInput.text(), connection=connection)))
+            instance = MaaInstance.create(w.nameInput.text(), w.addressInput.text(), w.emulatorInput.currentData())
+            maaInstanceManager.addInstance(instance)
+            self.loadCard(instance)
 
     def loadCards(self):
         if hasattr(self, 'maaInstanceCardView'):
@@ -110,35 +110,36 @@ class MaaInstanceInterface(ScrollArea):
             self.maaInstanceCardView.setParent(None)
             self.maaInstanceCardView.deleteLater()
         self.maaInstanceCardView = MaaInstanceCardView(self)
-        windows_manager.main_window.stackedWidget.currentChanged.connect(self.maaInstanceCardView.update)
-        for instance in maaConfig.getInstances().items():
-            self.maaInstanceCardView.addCard(MaaInstanceCard(self, instance[0], instance[1]))
+        for instance in maaInstanceManager.getInstances():
+            self.maaInstanceCardView.addCard(MaaInstanceCard(self, instance))
         self.vBoxLayout.addWidget(self.maaInstanceCardView)
         self.vBoxLayout.update()
         self.selectedCards.clear()
 
-    def loadCard(self, instance: dict):
-        self.maaInstanceCardView.addCard(MaaInstanceCard(self, instance[0], instance[1]))
+    def loadCard(self, instance: MaaInstance):
+        self.maaInstanceCardView.addCard(MaaInstanceCard(self, instance))
         self.maaInstanceCardView.update()
 
     def selectCard(self, card):
-        if self.toolBar.editing:
-            pass
+        if self.selectedCards:
+            self.selectedCards[0].unselect()
+            self.selectedCards[0] = card
         else:
-            if self.selectedCards:
-                self.selectedCards[0].unselect()
-                self.selectedCards[0] = card
-            else:
-                self.selectedCards.append(card)
+            self.selectedCards.append(card)
         w = InfoBar.info(
             title=self.tr('Current Selection'),
-            content=self.tr('Instance ') + str(card),
+            content=self.tr('Instance') + ' ' + str(card),
             orient=Qt.Horizontal,
             isClosable=True,
             position=InfoBarPosition.BOTTOM_LEFT,
             duration=2000,
             parent=self.parent()
         )
+        print(self.selectedCards)
+        maaInstanceManager.current = self.selectedCards[0].instance
+
+    def emerge(self):
+        self.maaInstanceCardView.update()
 
     def resizeEvent(self, e):
         super().resizeEvent(e)

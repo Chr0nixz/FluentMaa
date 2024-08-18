@@ -37,7 +37,7 @@ class AddInstanceMessageBox(MessageBoxBase):
         self.simulatorLayout.addWidget(self.emulatorLabel)
         self.simulatorLayout.addWidget(self.emulatorInput)
         self.moreLayout.addStretch(1)
-        self.moreLayout.addWidget(self.moreButton, 0, Qt.AlignRight)
+        self.moreLayout.addWidget(self.moreButton, 0, Qt.AlignmentFlag.AlignRight)
 
         self.viewLayout.addWidget(self.titleLabel, 1)
         self.viewLayout.addLayout(self.nameLayout, 1)

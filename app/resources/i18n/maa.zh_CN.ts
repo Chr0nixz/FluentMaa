@@ -10,7 +10,7 @@
     <message>
         <location filename="../../view/add_instance_message_box.py" line="12"/>
         <source>Name</source>
-        <translation type="unfinished"/>
+        <translation>名称</translation>
     </message>
     <message>
         <location filename="../../view/add_instance_message_box.py" line="14"/>
@@ -30,7 +30,7 @@
     <message>
         <location filename="../../view/add_instance_message_box.py" line="25"/>
         <source>Optional, default emulator's name</source>
-        <translation type="unfinished"/>
+        <translation>可选，默认为模拟器名称</translation>
     </message>
 </context>
 <context>
@@ -59,22 +59,22 @@
 <context>
     <name>InstanceDetailMessageBox</name>
     <message>
-        <location filename="../../view/instance_detail_message_box.py" line="13"/>
-        <source>Instance Settings</source>
-        <translation type="unfinished"/>
-    </message>
-    <message>
         <location filename="../../view/instance_detail_message_box.py" line="14"/>
-        <source>Name</source>
-        <translation type="unfinished"/>
+        <source>Instance Settings</source>
+        <translation>实例设置</translation>
     </message>
     <message>
-        <location filename="../../view/instance_detail_message_box.py" line="16"/>
+        <location filename="../../view/instance_detail_message_box.py" line="15"/>
+        <source>Name</source>
+        <translation>名称</translation>
+    </message>
+    <message>
+        <location filename="../../view/instance_detail_message_box.py" line="17"/>
         <source>Address</source>
         <translation>连接地址</translation>
     </message>
     <message>
-        <location filename="../../view/instance_detail_message_box.py" line="18"/>
+        <location filename="../../view/instance_detail_message_box.py" line="19"/>
         <source>Emulator</source>
         <translation>模拟器</translation>
     </message>
@@ -82,30 +82,73 @@
 <context>
     <name>MaaInstanceInterface</name>
     <message>
-        <location filename="../../view/maa_instance_interface.py" line="134"/>
+        <location filename="../../view/maa_instance_interface.py" line="130"/>
         <source>Current Selection</source>
-        <translation type="unfinished"/>
+        <translation>当前选择</translation>
     </message>
     <message>
-        <location filename="../../view/maa_instance_interface.py" line="135"/>
-        <source>Instance </source>
-        <translation type="unfinished"/>
+        <location filename="../../view/maa_instance_interface.py" line="131"/>
+        <source>Instance</source>
+        <translation>实例</translation>
+    </message>
+</context>
+<context>
+    <name>ToolBar</name>
+    <message>
+        <location filename="../../view/maa_instance_interface.py" line="20"/>
+        <source>MAA Instances</source>
+        <translation>MAA实例</translation>
+    </message>
+    <message>
+        <location filename="../../view/maa_instance_interface.py" line="32"/>
+        <source>Add</source>
+        <translation>添加</translation>
+    </message>
+    <message>
+        <location filename="../../view/maa_instance_interface.py" line="33"/>
+        <source>Refresh</source>
+        <translation>刷新</translation>
+    </message>
+    <message>
+        <location filename="../../view/maa_instance_interface.py" line="37"/>
+        <source>Edit</source>
+        <translation>编辑</translation>
+    </message>
+    <message>
+        <location filename="../../view/maa_instance_interface.py" line="42"/>
+        <source>Card</source>
+        <translation>卡片</translation>
+    </message>
+    <message>
+        <location filename="../../view/maa_instance_interface.py" line="43"/>
+        <source>List</source>
+        <translation>列表</translation>
+    </message>
+    <message>
+        <location filename="../../view/maa_instance_interface.py" line="50"/>
+        <source>Layout</source>
+        <translation>布局</translation>
     </message>
 </context>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../view/main_window.py" line="55"/>
+        <location filename="../../view/main_window.py" line="57"/>
         <source>Home</source>
         <translation>主页</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="59"/>
+        <location filename="../../view/main_window.py" line="61"/>
         <source>Instances</source>
         <translation>实例列表</translation>
     </message>
     <message>
-        <location filename="../../view/main_window.py" line="61"/>
+        <location filename="../../view/main_window.py" line="62"/>
+        <source>Basic Task</source>
+        <translation>基本任务</translation>
+    </message>
+    <message>
+        <location filename="../../view/main_window.py" line="64"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
@@ -214,6 +257,45 @@
         <location filename="../../view/setting_interface.py" line="119"/>
         <source>Configuration takes effect after restart</source>
         <translation>设置将在应用重启后生效</translation>
+    </message>
+</context>
+<context>
+    <name>TaskInterface</name>
+    <message>
+        <location filename="../../view/task_interface.py" line="119"/>
+        <source>No selected instance</source>
+        <translation>没有选择实例</translation>
+    </message>
+    <message>
+        <location filename="../../view/task_interface.py" line="120"/>
+        <source>Click OK to switch to the instance interface to select one.</source>
+        <translation>点击确认跳转到实例管理界面选择。</translation>
+    </message>
+</context>
+<context>
+    <name>TaskWidget</name>
+    <message>
+        <location filename="../../view/task_interface.py" line="63"/>
+        <source>StartUp</source>
+        <translation>开始唤醒</translation>
+    </message>
+    <message>
+        <location filename="../../view/task_interface.py" line="64"/>
+        <source>Fight</source>
+        <translation>自动作战</translation>
+    </message>
+</context>
+<context>
+    <name>ToolBar</name>
+    <message>
+        <location filename="../../view/task_interface.py" line="18"/>
+        <source>Basic Task</source>
+        <translation>基本任务</translation>
+    </message>
+    <message>
+        <location filename="../../view/task_interface.py" line="19"/>
+        <source>Current instance</source>
+        <translation>当前实例</translation>
     </message>
 </context>
 </TS>

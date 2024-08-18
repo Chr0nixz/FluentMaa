@@ -10,6 +10,7 @@ from app.common.signal_bus import signalBus
 from app.view.home_interface import HomeInterface
 from app.view.maa_instance_interface import MaaInstanceInterface
 from app.view.setting_interface import SettingInterface
+from app.view.task_interface import TaskInterface
 
 
 class MainWindow(FluentWindow):
@@ -22,6 +23,7 @@ class MainWindow(FluentWindow):
 
         self.homeInterface = HomeInterface(self)
         self.maaInstanceInterface = MaaInstanceInterface(self)
+        self.taskInterface = TaskInterface(self)
         self.settingInterface = SettingInterface(self)
 
         self.navigationInterface.setAcrylicEnabled(True)
@@ -57,11 +59,14 @@ class MainWindow(FluentWindow):
 
         pos = NavigationItemPosition.SCROLL
         self.addSubInterface(self.maaInstanceInterface, FIF.APPLICATION, self.tr('Instances'), pos)
+        self.addSubInterface(self.taskInterface, FIF.CHECKBOX, self.tr('Basic Task'), pos)
 
         self.addSubInterface(self.settingInterface, FIF.SETTING, self.tr('Settings'), NavigationItemPosition.BOTTOM)
 
     def connectSignalToSlot(self):
         signalBus.switchToInterface.connect(self.switchToInterface)
+        self.stackedWidget.currentChanged.connect(lambda: self.stackedWidget.currentWidget().emerge())
+
 
     def resizeEvent(self, e):
         super().resizeEvent(e)

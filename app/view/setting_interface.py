@@ -134,3 +134,6 @@ class SettingInterface(ScrollArea):
         self.maaFolderCard.clicked.connect(self.__onMaaFolderCardClick)
 
         self.themeCard.optionChanged.connect(lambda ci: setTheme(cfg.get(ci)))
+
+    def emerge(self):
+        pass
