@@ -1,7 +1,7 @@
 from qfluentwidgets import FluentIcon
 
-from app.components.setting_card.input_setting_card import InputSettingCard
-from app.components.task_setting_view import TaskSettingView, TaskSettingInterface
+from app.components.setting_cards.input_setting_card import InputSettingCard
+from app.components.task_setting_views.task_setting_view import TaskSettingView, TaskSettingInterface
 
 
 class StartUpSettingView:
@@ -19,7 +19,7 @@ class StartUpSettingView:
                 icon=FluentIcon.PEOPLE,
                 title=self.parent.tr('Switch account'),
                 config=config,
-                name='account'
+                name='account_name'
             )
         )
         basicInterface.initLayout()

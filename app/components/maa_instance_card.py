@@ -1,16 +1,16 @@
-from PySide6.QtCore import Qt, QEasingCurve
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QFrame, QLabel, QVBoxLayout, QHBoxLayout, QWidget
+from PySide6.QtWidgets import QLabel, QVBoxLayout, QHBoxLayout, QWidget
 from qfluentwidgets import IconWidget, ToolButton, FluentIcon, FlowLayout, PrimaryToolButton, Dialog, InfoBar, \
     InfoBarPosition, ElevatedCardWidget
 
 from app.common import windows_manager
 from app.common.config import cfg
-from app.common.maa.config.maa_config_manager import maaConfig
 from app.common.maa.emulators import Emulator
-from app.common.maa.maa_instance import MaaInstance
-from app.common.maa.maa_instance_manager import maaInstanceManager
+from app.common.maa.instance.maa_instance import MaaInstance, InstanceStatus
+from app.common.maa.instance.maa_instance_manager import maaInstanceManager
 from app.common.resource_manager import resource
+from app.common.signal_bus import signalBus
 from app.common.style_sheet import StyleSheet
 from app.view.instance_detail_message_box import InstanceDetailMessageBox
 
@@ -46,6 +46,7 @@ class MaaInstanceCard(ElevatedCardWidget):
 
         self.__initWidgets()
         self.__connectSignalToSlot()
+        self.refreshButtons()
 
     def __initWidgets(self):
         self.setCursor(Qt.PointingHandCursor)
@@ -82,6 +83,9 @@ class MaaInstanceCard(ElevatedCardWidget):
 
     def __connectSignalToSlot(self):
         self.removeButton.clicked.connect(self.removeConfirm)
+        self.startButton.clicked.connect(self.start)
+        signalBus.instanceChanged.connect(lambda i: self.refresh(i))
+        signalBus.instanceStatusChanged.connect(self.refreshButtons)
 
     def mouseReleaseEvent(self, event):
         super().mouseReleaseEvent(event)
@@ -108,7 +112,7 @@ class MaaInstanceCard(ElevatedCardWidget):
     def clickSelected(self):
         w = InstanceDetailMessageBox(windows_manager.main_window, self.instance)
         if w.exec():
-            pass
+            print('a')
         self.parent().update()
 
     def unselect(self):
@@ -120,6 +124,33 @@ class MaaInstanceCard(ElevatedCardWidget):
         maaInstanceManager.removeInstance(self.instance.uid)
         self.setParent(None)
         self.deleteLater()
+
+    def refresh(self, uid: str = ''):
+        print(uid, self.instance.uid)
+        if uid == str(self.instance.uid):
+            self.iconWidget.setIcon(Emulator.getIcon(self.instance.connection.emulator, default=QIcon(resource.getImg('maa_logo.png'))))
+            self.titleLabel.setText(self.instance.name)
+            content = f'{self.tr('Address')}: {self.instance.connection.address}\n{self.tr('Status')}: {self.status}\n'
+            if not self.warnings:
+                content += self.tr('No warning')
+            self.contentLabel.setText(content)
+            self.update()
+
+    def start(self):
+        if maaInstanceManager.startInstance(self.instance):
+            self.startButton.setEnabled(False)
+
+    def refreshButtons(self):
+        match self.instance.status:
+            case InstanceStatus.STOP | InstanceStatus.ERROR:
+                self.startButton.setEnabled(True)
+                self.stopButton.setEnabled(False)
+                self.status = 'Stop'
+            case InstanceStatus.RUNNING:
+                self.startButton.setEnabled(False)
+                self.stopButton.setEnabled(True)
+                self.status = 'Running'
+        self.refresh()
 
     def __str__(self):
         return self.instance.name + ': ' + self.instance.connection.address
@@ -185,7 +216,7 @@ class MaaInstanceCardView(QWidget):
             content=self.tr('Instance: ') + str(card),
             orient=Qt.Horizontal,
             isClosable=True,
-            position=InfoBarPosition.BOTTOM_LEFT,
+            position=InfoBarPosition.BOTTOM_RIGHT,
             duration=3000,
             parent=self.parent()
         )

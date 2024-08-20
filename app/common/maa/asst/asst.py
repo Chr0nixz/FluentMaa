@@ -6,7 +6,7 @@ import pathlib
 import platform
 from typing import Union, Optional
 
-from .utils import InstanceOptionType, StaticOptionType, JSON
+from app.common.maa.asst.utils import InstanceOptionType, StaticOptionType, JSON
 
 
 class Asst:
@@ -63,7 +63,9 @@ class Asst:
 
         try:
             Asst.__lib = lib_import_func(str(Asst.__libpath))
+            print(3)
         except OSError:
+            print(6)
             Asst.__libpath = ctypes.util.find_library('MaaCore')
             Asst.__lib = lib_import_func(str(Asst.__libpath))
 
@@ -233,7 +235,12 @@ class Asst:
 
         : return: 版本号
         """
-        return Asst.__lib.AsstGetVersion().decode('utf-8')
+        try:
+            v = Asst.__lib.AsstGetVersion()
+            print(9)
+            return v.decode('utf-8')
+        except Exception as e:
+            print(e)
 
     @staticmethod
     def __set_lib_properties():

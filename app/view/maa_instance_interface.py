@@ -5,8 +5,8 @@ from qfluentwidgets import FluentIcon, ScrollArea, CommandBar, \
     Action, LargeTitleLabel, InfoBar, InfoBarPosition, CheckableMenu, MenuIndicatorType, TransparentDropDownPushButton
 
 from app.common import windows_manager
-from app.common.maa.maa_instance import MaaInstance
-from app.common.maa.maa_instance_manager import maaInstanceManager
+from app.common.maa.instance.maa_instance import MaaInstance
+from app.common.maa.instance.maa_instance_manager import maaInstanceManager
 from app.common.style_sheet import StyleSheet
 from app.components.maa_instance_card import MaaInstanceCard, MaaInstanceCardView
 from app.view.add_instance_message_box import AddInstanceMessageBox
@@ -131,7 +131,7 @@ class MaaInstanceInterface(ScrollArea):
             content=self.tr('Instance') + ' ' + str(card),
             orient=Qt.Horizontal,
             isClosable=True,
-            position=InfoBarPosition.BOTTOM_LEFT,
+            position=InfoBarPosition.BOTTOM_RIGHT,
             duration=2000,
             parent=self.parent()
         )

@@ -1,10 +1,10 @@
 from qfluentwidgets import FluentIcon
 
 from app.common.maa.config.maa_task_config import FightConfig
-from app.components.setting_card.input_setting_card import InputSettingCard
-from app.components.setting_card.spin_box_setting_card import SpinBoxSettingCard
-from app.components.setting_card.switch_button_setting_card import SwitchButtonSettingCard
-from app.components.task_setting_view import TaskSettingView, TaskSettingInterface
+from app.components.setting_cards.input_setting_card import InputSettingCard
+from app.components.setting_cards.spin_box_setting_card import SpinBoxSettingCard
+from app.components.setting_cards.switch_button_setting_card import SwitchButtonSettingCard
+from app.components.task_setting_views.task_setting_view import TaskSettingView, TaskSettingInterface
 
 
 class FightSettingView:
@@ -17,6 +17,14 @@ class FightSettingView:
         view.taskType = self.taskType
         view.config = config
         basicInterface = TaskSettingInterface(self.parent, self.parent.tr('Fight Basic'))
+        basicInterface.addCard(
+            InputSettingCard(
+                icon=FluentIcon.SETTING,
+                title=self.parent.tr('Stage'),
+                config=config,
+                name='stage'
+            )
+        )
         basicInterface.addCard(
             SpinBoxSettingCard(
                 icon=FluentIcon.SETTING,

@@ -262,12 +262,12 @@
 <context>
     <name>TaskInterface</name>
     <message>
-        <location filename="../../view/task_interface.py" line="119"/>
+        <location filename="../../view/task_interface.py" line="139"/>
         <source>No selected instance</source>
         <translation>没有选择实例</translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="120"/>
+        <location filename="../../view/task_interface.py" line="140"/>
         <source>Click OK to switch to the instance interface to select one.</source>
         <translation>点击确认跳转到实例管理界面选择。</translation>
     </message>
@@ -275,12 +275,12 @@
 <context>
     <name>TaskWidget</name>
     <message>
-        <location filename="../../view/task_interface.py" line="63"/>
+        <location filename="../../view/task_interface.py" line="76"/>
         <source>StartUp</source>
         <translation>开始唤醒</translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="64"/>
+        <location filename="../../view/task_interface.py" line="79"/>
         <source>Fight</source>
         <translation>自动作战</translation>
     </message>
@@ -288,14 +288,133 @@
 <context>
     <name>ToolBar</name>
     <message>
-        <location filename="../../view/task_interface.py" line="18"/>
+        <location filename="../../view/task_interface.py" line="27"/>
         <source>Basic Task</source>
         <translation>基本任务</translation>
     </message>
     <message>
-        <location filename="../../view/task_interface.py" line="19"/>
+        <location filename="../../view/task_interface.py" line="28"/>
         <source>Current instance</source>
         <translation>当前实例</translation>
+    </message>
+</context>
+<context>
+    <name>MaaInstanceCard</name>
+    <message>
+        <location filename="../../components/maa_instance_card.py" line="38"/>
+        <source>No warning</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../components/maa_instance_card.py" line="94"/>
+        <source>Are you sure to remove the instance?</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../components/maa_instance_card.py" line="96"/>
+        <source>If you remove the instance, it will disappear from the list foverver.
+But you can backup config/maa.json to recover data.</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../components/maa_instance_card.py" line="98"/>
+        <source>Remove</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../components/maa_instance_card.py" line="99"/>
+        <source>Cancel</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>MaaInstanceCardView</name>
+    <message>
+        <location filename="../../components/maa_instance_card.py" line="184"/>
+        <source>Removed</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../components/maa_instance_card.py" line="185"/>
+        <source>Instance: </source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>TaskListView</name>
+    <message>
+        <location filename="../../components/task_list_view.py" line="19"/>
+        <source>Task List</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>self.parent</name>
+    <message>
+        <location filename="../../components/task_setting_views/fight_setting_view.py" line="18"/>
+        <source>Fight Basic</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../components/task_setting_views/fight_setting_view.py" line="22"/>
+        <source>Medicine Number</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../components/task_setting_views/fight_setting_view.py" line="30"/>
+        <source>Stone Number</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../components/task_setting_views/fight_setting_view.py" line="36"/>
+        <source>Times</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../components/task_setting_views/fight_setting_view.py" line="42"/>
+        <source>Basic Settings</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../components/task_setting_views/fight_setting_view.py" line="43"/>
+        <source>Fight Advanced</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../components/task_setting_views/fight_setting_view.py" line="48"/>
+        <source>Use residual san</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../components/task_setting_views/fight_setting_view.py" line="51"/>
+        <source>Advanced Settings</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>self.parent</name>
+    <message>
+        <location filename="../../components/task_setting_views/startup_setting_view.py" line="16"/>
+        <source>Fight</source>
+        <translation>自动作战</translation>
+    </message>
+    <message>
+        <location filename="../../components/task_setting_views/startup_setting_view.py" line="20"/>
+        <source>Switch account</source>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../../components/task_setting_views/startup_setting_view.py" line="26"/>
+        <source>Basic Settings</source>
+        <translation type="unfinished"/>
+    </message>
+</context>
+<context>
+    <name>TaskSettingView</name>
+    <message>
+        <location filename="../../components/task_setting_views/task_setting_view.py" line="16"/>
+        <source>Add</source>
+        <translation>添加</translation>
     </message>
 </context>
 </TS>

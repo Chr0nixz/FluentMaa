@@ -9,9 +9,9 @@ from multiprocessing import queues, Process
 from urllib import request
 from urllib.error import HTTPError, URLError
 
-from .asst import Asst
-from .utils import Version
-from . import downloader
+from app.common.maa.asst.asst import Asst
+from app.common.maa.asst.utils import Version
+from app.common.maa.asst import downloader
 
 
 class Updater:
@@ -43,12 +43,15 @@ class Updater:
         self.assets_object = None
 
         # 使用子线程获取当前版本后关闭，避免占用dll
-        q = queues.Queue(1, ctx=multiprocessing)
-        p = Process(target=self._get_cur_version, args=(path, q,))
-        p.start()
-        p.join()
+        #q = queues.Queue(1, ctx=multiprocessing)
+        #p = Process(target=self._get_cur_version, args=(path, q,))
+        #p.start()
+        #p.join()
         # MAA当前版本 self.cur_version
-        self.cur_version = q.get()
+        #self.cur_version = q.get()
+        Asst.load(path=path)
+        asst = Asst()
+        self.cur_version = asst.get_version()
 
     @staticmethod
     def map_version_type(version):

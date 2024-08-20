@@ -1,12 +1,14 @@
 from PySide6.QtCore import QSize
-from PySide6.QtGui import QIcon
+from PySide6.QtGui import QIcon, Qt
 from PySide6.QtWidgets import QApplication, QWidget
-from qfluentwidgets import FluentIcon as FIF
+from qfluentwidgets import FluentIcon as FIF, InfoBar, InfoBarPosition
 from qfluentwidgets import FluentWindow, SplashScreen, NavigationItemPosition
 
 from app.common import windows_manager
 from app.common.resource_manager import resource
 from app.common.signal_bus import signalBus
+from app.components.loading_bar import LoadingBar
+from app.components.loading_label import LoadingLabel
 from app.view.home_interface import HomeInterface
 from app.view.maa_instance_interface import MaaInstanceInterface
 from app.view.setting_interface import SettingInterface
@@ -32,6 +34,8 @@ class MainWindow(FluentWindow):
 
         self.initNavigation()
 
+        self.showLoadingBar()
+
         self.splashScreen.finish()
 
     def initWindow(self):
@@ -44,7 +48,7 @@ class MainWindow(FluentWindow):
         self.setMicaEffectEnabled(True)
 
         self.splashScreen = SplashScreen(self.windowIcon(), self)
-        self.splashScreen.setIconSize(QSize(250, 250))
+        self.splashScreen.setIconSize(QSize(320, 320))
         self.splashScreen.raise_()
 
         desktop = QApplication.screens()[0].availableGeometry()
@@ -66,6 +70,8 @@ class MainWindow(FluentWindow):
     def connectSignalToSlot(self):
         signalBus.switchToInterface.connect(self.switchToInterface)
         self.stackedWidget.currentChanged.connect(lambda: self.stackedWidget.currentWidget().emerge())
+        signalBus.maaCoreLoaded.connect(self.onMaaCoreLoaded)
+        signalBus.maaCoreUnready.connect(self.onMaaCoreUnready)
 
 
     def resizeEvent(self, e):
@@ -78,3 +84,44 @@ class MainWindow(FluentWindow):
         for w in interfaces:
             if w.objectName() == route_key:
                 self.stackedWidget.setCurrentWidget(w, False)
+
+    def onMaaCoreLoaded(self, success):
+        if success:
+            w = InfoBar.success(
+                title=self.tr('MaaCore Loaded'),
+                content=self.tr('You can start to use Maa'),
+                orient=Qt.Orientation.Horizontal,
+                duration=4000,
+                position=InfoBarPosition.BOTTOM_RIGHT,
+                parent=self
+            )
+        else:
+            w = InfoBar.error(
+                title=self.tr('MaaCore Loaded Failed'),
+                content=self.tr('Chech your Maa folder and restart'),
+                orient=Qt.Orientation.Horizontal,
+                duration=4000,
+                position=InfoBarPosition.BOTTOM_RIGHT,
+                parent=self
+            )
+        w.show()
+
+    def onMaaCoreUnready(self):
+        InfoBar.warning(
+            title=self.tr('MaaCore Not Loaded'),
+            content=self.tr('Check your Maa folder and restart'),
+            orient=Qt.Orientation.Horizontal,
+            duration=4000,
+            position=InfoBarPosition.BOTTOM_RIGHT,
+            parent=self
+        )
+
+    def showLoadingBar(self):
+        w = LoadingBar(
+            title=self.tr('Loading Maa'),
+            content=self.tr('Please wait'),
+            orient=Qt.Orientation.Horizontal,
+            parent=self
+        )
+        w.show()
+

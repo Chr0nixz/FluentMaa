@@ -3,31 +3,29 @@ from PySide6.QtGui import QPainter, QColor, QBrush
 from PySide6.QtWidgets import QSplitter, QSplitterHandle
 from qfluentwidgets import isDarkTheme
 
+from app.common.style_sheet import StyleSheet
+
 
 class VerticalSplitter(QSplitter):
-    def __init__(self, orientation, parent=None):
-        super().__init__(orientation, parent)
-        self.setStyleSheet("""
-        VerticalSplitter::handle:vertical:hover {
-            background-color: rgb(227, 229, 232)
-        }
-        VerticalSplitter::handle:vertical:click {
-            background-color: rgb(219, 221, 224)
-        }
-        """)
+    def __init__(self, parent=None):
+        super().__init__(Qt.Orientation.Vertical, parent)
+        StyleSheet.SPLITTER.apply(self)
 
     def createHandle(self):
-        return VerticalSplitterHandle(self.orientation(), self)
+        return VerticalSplitterHandle(self)
 
 
 class VerticalSplitterHandle(QSplitterHandle):
-    def __init__(self, orientation, parent):
-        super().__init__(orientation, parent)
+    def __init__(self, parent):
+        super().__init__(Qt.Orientation.Vertical, parent)
+        self.setFixedHeight(10)
 
     def paintEvent(self, event):
+        super().paintEvent(event)
+        self.setProperty('hover', False)
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing)
-        if isDarkTheme:
+        if isDarkTheme():
             painter.setBrush(QBrush(QColor("#a1a1a1")))
         else:
             painter.setBrush(QBrush(QColor("#818181")))

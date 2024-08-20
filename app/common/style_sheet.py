@@ -15,6 +15,8 @@ class StyleSheet(StyleSheetBase, Enum):
     MAA_INSTANCE_INTERFACE = "maa_instance_interface"
     MAA_INSTANCE_CARD = "maa_instance_card"
     TASK_SETTING_VIEW = "task_setting_view"
+    SPLITTER = 'splitter'
+    LOADING_BAR = 'loading_bar'
 
     def path(self, theme=Theme.AUTO):
         theme = qconfig.theme if theme == Theme.AUTO else theme

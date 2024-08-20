@@ -10,7 +10,12 @@ language = 'zh_CN'
 lup_path = '../.venv/Scripts/pyside6-lupdate.exe'
 lre_path = '../.venv/Scripts/pyside6-lrelease.exe'
 
-scan_path = ['view']
+scan_path = [
+    'view',
+    'components',
+    'components/setting_cards',
+    'components/task_setting_views'
+]
 exclude = ['__init__.py', '__pycache__']
 
 check_translation = True
@@ -40,7 +45,7 @@ for scan_file in scan_path:
     path = os.path.join(parent, 'app', scan_file)
 
     for file in os.listdir(path):
-        if file in exclude:
+        if file in exclude or os.path.isdir(file):
             continue
 
         file = os.path.join(path, file)
@@ -61,10 +66,10 @@ for scan_file in scan_path:
                         child.attrib.pop('type', None)
                         child.text = text
                     else:
-                        print('翻译为空:' + source)
+                        print('\033[91m翻译为空:\033[0m' + source)
                         check_translation = False
                 else:
-                    print('无翻译:' + source)
+                    print('\033[91m无翻译:\033[0m' + source)
                     check_translation = False
             root.append(context)
         os.remove(temp_path)

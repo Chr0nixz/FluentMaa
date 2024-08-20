@@ -1,9 +1,10 @@
-from PySide6.QtCore import Qt
 from PySide6.QtWidgets import QHBoxLayout
-from qfluentwidgets import MessageBoxBase, TitleLabel, BodyLabel, LineEdit, TransparentPushButton, ComboBox, FluentIcon
+from qfluentwidgets import MessageBoxBase, TitleLabel, BodyLabel, LineEdit, ComboBox
 
 from app.common.maa.emulators import Emulator
-from app.common.maa.maa_instance import MaaInstance
+from app.common.maa.instance.maa_instance import MaaInstance
+from app.common.maa.instance.maa_instance_manager import maaInstanceManager
+from app.common.signal_bus import signalBus
 
 
 class InstanceDetailMessageBox(MessageBoxBase):
@@ -45,9 +46,16 @@ class InstanceDetailMessageBox(MessageBoxBase):
         self.viewLayout.addLayout(self.simulatorLayout, 1)
 
         self.widget.setMinimumWidth(350)
-        self.yesButton.setDisabled(True)
         self.addressInput.textChanged.connect(self._validateAddress)
+        self.yesButton.clicked.connect(self.save)
 
     def _validateAddress(self, text):
         if text:
             self.yesButton.setEnabled(True)
+
+    def save(self):
+        self.instance.name = self.nameInput.text()
+        self.instance.connection.address = self.addressInput.text()
+        self.instance.connection.emulator = self.emulatorInput.currentData()
+        maaInstanceManager.refreshInstance(self.instance)
+        signalBus.instanceChanged.emit(str(self.instance.uid))

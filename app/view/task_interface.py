@@ -1,19 +1,18 @@
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QListWidgetItem, QSplitter
+from PySide6.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QListWidgetItem, QListWidget
 from qfluentwidgets import LargeTitleLabel, StrongBodyLabel, TransparentDropDownPushButton, RoundMenu, Action, \
     MessageBox, ListWidget
 
 from app.common import windows_manager
 from app.common.maa.emulators import Emulator
-from app.common.maa.maa_instance_manager import maaInstanceManager
+from app.common.maa.instance.maa_instance_manager import maaInstanceManager
 from app.common.resource_manager import resource
 from app.common.signal_bus import signalBus
-from app.components.separator_widget import VerticalSeparatorWidget, HorizontalSeparatorWidget
+from app.components.separator_widget import VerticalSeparatorWidget
 from app.components.splitter import VerticalSplitter
-from app.components.task_list_view import TaskListView
-from app.components.task_setting_views.fight_setting_view import FightSettingView
-from app.components.task_setting_views.startup_setting_view import StartUpSettingView
+from app.components.task_list import TaskListView
+from app.components.task_setting_views.task_setting_widget import TaskSettingWidget
 
 
 class ToolBar(QWidget):
@@ -44,7 +43,7 @@ class ToolBar(QWidget):
         self.vBoxLayout.addLayout(self.hBoxLayout)
         self.vBoxLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-    def updateData(self):
+    def updateWidget(self):
         self.instance = self.parent().instance
         self.currentMenu = RoundMenu(self)
         self.currentMenu.addAction(Action(Emulator.getIcon(self.instance.connection.emulator), self.instance.name))
@@ -55,11 +54,12 @@ class ToolBar(QWidget):
 class TaskWidget(QWidget):
     def __init__(self, parent):
         super().__init__(parent)
+        self.instance = self.parent().instance
 
-        self.taskList = ListWidget()
+        self.taskOptions = ListWidget()
         self.separator = VerticalSeparatorWidget(self)
-        self.view = StartUpSettingView(self).getWidget(None)
-        self.taskListView = TaskListView()
+        self.taskSettingWidget = TaskSettingWidget(parent=self)
+        self.taskListView = TaskListView(self)
 
         self.hBoxLayout = QHBoxLayout(self)
         self.vBoxLayout = QVBoxLayout()
@@ -74,30 +74,36 @@ class TaskWidget(QWidget):
         fightItem = QListWidgetItem(self.tr('Fight'))
         fightItem.setIcon(QIcon(resource.getImg('maa_logo.png')))
         fightItem.setData(0, 'Fight')
-        self.taskList.addItem(startUpItem)
-        self.taskList.addItem(fightItem)
-        self.taskList.itemClicked.connect(self.parent().switchTask)
+        self.taskOptions.addItem(startUpItem)
+        self.taskOptions.addItem(fightItem)
+        self.taskOptions.itemClicked.connect(lambda i: self.taskSettingWidget.switchWidget(i.data(0)))
+        self.taskOptions.setDragEnabled(True)
+        self.taskOptions.setAcceptDrops(True)
+        self.taskOptions.setDragDropMode(QListWidget.DragDropMode.InternalMove)
 
     def __initLayout(self):
-        splitter = VerticalSplitter(self)
-        splitter.setOrientation(Qt.Orientation.Vertical)
-        splitter.addWidget(self.taskList)
-        splitter.addWidget(self.taskListView)
-        self.vBoxLayout.addWidget(splitter)
-        #self.vBoxLayout.addWidget(self.taskList, 3)
-        #self.vBoxLayout.addWidget(HorizontalSeparatorWidget(self))
-        #self.vBoxLayout.addWidget(self.taskListView, 2)
+        self.splitter = VerticalSplitter(self)
+        self.splitter.addWidget(self.taskOptions)
+        self.splitter.addWidget(self.taskListView)
+        self.splitter.setSizes([1, 1])
+        self.vBoxLayout.addWidget(self.splitter)
 
         self.hBoxLayout.addLayout(self.vBoxLayout, 1)
         self.hBoxLayout.addWidget(self.separator)
-        self.hBoxLayout.addWidget(self.view, 2)
+        self.hBoxLayout.addWidget(self.taskSettingWidget, 2)
 
-    def switchView(self, view):
-        self.hBoxLayout.removeWidget(self.view)
-        self.view.setParent(None)
-        self.view.deleteLater()
-        self.view = view
-        self.hBoxLayout.addWidget(self.view, 2)
+    def updateWidget(self):
+        if not self.instance == maaInstanceManager.current:
+            self.instance = maaInstanceManager.current
+            signalBus.taskListChanged.emit()
+            self.hBoxLayout.removeWidget(self.taskSettingWidget)
+            self.taskSettingWidget.setParent(None)
+            self.taskSettingWidget.deleteLater()
+            self.taskSettingWidget = TaskSettingWidget(parent=self)
+            self.hBoxLayout.addWidget(self.taskSettingWidget, 2)
+            self.taskListView.taskList.clear()
+            self.taskListView.taskList.loadTasks()
+
 
 class TaskInterface(QWidget):
     def __init__(self, parent):
@@ -116,15 +122,12 @@ class TaskInterface(QWidget):
 
         self.setLayout(self.vBoxLayout)
 
-    def __initWidget(self):
-        pass
 
     def emerge(self):
         self.instance = maaInstanceManager.current
-        print(self.instance)
         if self.instance:
-            self.toolBar.updateData()
-            signalBus.taskListChanged.emit()
+            self.toolBar.updateWidget()
+            self.taskWidget.updateWidget()
         else:
             w = MessageBox(self.tr('No selected instance'),
                            self.tr('Click OK to switch to the instance interface to select one.'),
@@ -132,12 +135,3 @@ class TaskInterface(QWidget):
             w.cancelButton.hide()
             if w.exec():
                 signalBus.switchToInterface.emit('maaInstanceInterface')
-
-    def switchTask(self, item):
-        if not item.data(0) == self.taskWidget.view.taskType:
-            match item.data(0):
-                case 'StartUp':
-                    self.taskWidget.switchView(StartUpSettingView(self).getWidget(self.instance.task.startup))
-                case 'Fight':
-                    print(type(self.instance.task.fight))
-                    self.taskWidget.switchView(FightSettingView(self).getWidget(self.instance.task.fight))
