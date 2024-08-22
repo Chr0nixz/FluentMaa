@@ -20,3 +20,11 @@ Windows 11风格的MaaGUI
 - 更新无需重启
 - 更小的内存占用
 - 剩下的以后再说
+
+## 开发进度
+目前还属于半成品状态，达不到实用阶段，高速迭代中  
+希望有大佬协助开发↖(^ω^)↗
+
+## 屏幕截图
+<img alt="LOGO" src="./screenshots/instance_interface.png" />
+<img alt="LOGO" src="./screenshots/setting_interface.png" />
