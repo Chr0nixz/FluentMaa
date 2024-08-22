@@ -84,6 +84,7 @@ class MaaInstanceCard(ElevatedCardWidget):
     def __connectSignalToSlot(self):
         self.removeButton.clicked.connect(self.removeConfirm)
         self.startButton.clicked.connect(self.start)
+        self.stopButton.clicked.connect(self.stop)
         signalBus.instanceChanged.connect(lambda i: self.refresh(i))
         signalBus.instanceStatusChanged.connect(self.refreshButtons)
 
@@ -139,6 +140,9 @@ class MaaInstanceCard(ElevatedCardWidget):
     def start(self):
         if maaInstanceManager.startInstance(self.instance):
             self.startButton.setEnabled(False)
+
+    def stop(self):
+        signalBus.instanceStop.emit(str(self.instance.uid))
 
     def refreshButtons(self):
         match self.instance.status:

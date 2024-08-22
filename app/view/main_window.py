@@ -86,24 +86,34 @@ class MainWindow(FluentWindow):
                 self.stackedWidget.setCurrentWidget(w, False)
 
     def onMaaCoreLoaded(self, success):
-        if success:
-            w = InfoBar.success(
-                title=self.tr('MaaCore Loaded'),
-                content=self.tr('You can start to use Maa'),
-                orient=Qt.Orientation.Horizontal,
-                duration=4000,
-                position=InfoBarPosition.BOTTOM_RIGHT,
-                parent=self
-            )
-        else:
-            w = InfoBar.error(
-                title=self.tr('MaaCore Loaded Failed'),
-                content=self.tr('Chech your Maa folder and restart'),
-                orient=Qt.Orientation.Horizontal,
-                duration=4000,
-                position=InfoBarPosition.BOTTOM_RIGHT,
-                parent=self
-            )
+        match success[0]:
+            case 0:
+                w = InfoBar.error(
+                    title=self.tr('MaaCore Loaded Failed'),
+                    content=str(success[1]),
+                    orient=Qt.Orientation.Horizontal,
+                    duration=4000,
+                    position=InfoBarPosition.BOTTOM_RIGHT,
+                    parent=self
+                )
+            case 1:
+                w = InfoBar.success(
+                    title=self.tr('MaaCore Loaded'),
+                    content=self.tr('You can start to use Maa'),
+                    orient=Qt.Orientation.Horizontal,
+                    duration=4000,
+                    position=InfoBarPosition.BOTTOM_RIGHT,
+                    parent=self
+                )
+            case 2:
+                w = InfoBar.warning(
+                    title=self.tr('MaaCore Warning'),
+                    content=str(success[1]),
+                    orient=Qt.Orientation.Horizontal,
+                    duration=4000,
+                    position=InfoBarPosition.BOTTOM_RIGHT,
+                    parent=self
+                )
         w.show()
 
     def onMaaCoreUnready(self):

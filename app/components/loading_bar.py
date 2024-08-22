@@ -28,8 +28,6 @@ class LoadingBar(QFrame):
         self.isClosable = isClosable
         self.position = position
 
-        self.status = 0
-
         self.iconWidget = LoadingLabel(self)
         self.titleLabel = QLabel(self)
         self.contentLabel = QLabel(self)
@@ -47,6 +45,7 @@ class LoadingBar(QFrame):
         self.darkBackgroundColor = None
 
         signalBus.maaCoreLoaded.connect(lambda i: self.__fadeOut())
+        signalBus.maaCoreStatus.connect(self.setStatus)
 
         self.__initWidget()
 
@@ -103,6 +102,15 @@ class LoadingBar(QFrame):
         self.hBoxLayout.addWidget(self.closeButton, 0, Qt.AlignTop | Qt.AlignLeft)
 
         self._adjustText()
+
+    def setStatus(self, status: int):
+        print(status)
+        if status == 2:
+            self.title = self.tr('Updating Maa')
+            self._adjustText()
+        elif status == 3:
+            self.title = self.tr('Loading Maa')
+            self._adjustText()
 
     def __setQss(self):
         self.titleLabel.setObjectName('titleLabel')

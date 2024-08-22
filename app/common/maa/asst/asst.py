@@ -63,9 +63,7 @@ class Asst:
 
         try:
             Asst.__lib = lib_import_func(str(Asst.__libpath))
-            print(3)
         except OSError:
-            print(6)
             Asst.__libpath = ctypes.util.find_library('MaaCore')
             Asst.__lib = lib_import_func(str(Asst.__libpath))
 
@@ -88,6 +86,7 @@ class Asst:
             ``callback``:   回调函数
             ``arg``:        自定义参数
         """
+        self.instance = None
         self.__callback = callback
         if callback:
             self.__ptr = Asst.__lib.AsstCreateEx(callback, arg)
@@ -238,9 +237,16 @@ class Asst:
         try:
             v = Asst.__lib.AsstGetVersion()
             print(9)
-            return v.decode('utf-8')
+            print(v)
+            r = v.decode('utf-8')
+            print(10)
+            return r
         except Exception as e:
             print(e)
+
+    def stopByUid(self, uid: str):
+        if str(self.instance.uid) == uid:
+            self.stop()
 
     @staticmethod
     def __set_lib_properties():

@@ -37,6 +37,8 @@ class FightSettingView:
             SpinBoxSettingCard(
                 icon=FluentIcon.SETTING,
                 title=self.parent.tr('Stone Number'),
+                config=config,
+                name='stone'
             )
         )
         basicInterface.addCard(

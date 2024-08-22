@@ -56,6 +56,7 @@ class MaaPoolThread(QThread):
         for task in instance.task_list:
             asst.append_task(task['type'], task['config'])
         asst.instance = instance
+        signalBus.instanceStop.connect(asst.stopByUid)
         asst.start()
         self.asstList.append(asst)
         signalBus.instanceMessage.emit((instance.uid, 'start', True))

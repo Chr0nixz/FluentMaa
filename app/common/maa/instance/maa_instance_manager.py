@@ -60,6 +60,13 @@ class MaaInstanceManager:
         self.current.task_list.remove(task)
         self.refreshInstanceCur()
 
+    def updateTaskCur(self, index: int, task: dict):
+        self.current.task_list[index] = task
+        self.refreshInstanceCur()
+
+    def getTaskCur(self, index: int):
+        return self.current.task_list[index]
+
     def refreshInstance(self, instance):
         maaConfig.addInstance(instance)
 

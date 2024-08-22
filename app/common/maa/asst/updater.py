@@ -1,17 +1,16 @@
 import json
-import multiprocessing
+import os
 import platform
 import re
-import os
 import tarfile
+import time
 import zipfile
-from multiprocessing import queues, Process
 from urllib import request
 from urllib.error import HTTPError, URLError
 
+from app.common.maa.asst import downloader
 from app.common.maa.asst.asst import Asst
 from app.common.maa.asst.utils import Version
-from app.common.maa.asst import downloader
 
 
 class Updater:
@@ -41,17 +40,12 @@ class Updater:
         self.latest_json = None
         self.latest_version = None
         self.assets_object = None
+        self.cur_version = None
 
-        # 使用子线程获取当前版本后关闭，避免占用dll
-        #q = queues.Queue(1, ctx=multiprocessing)
-        #p = Process(target=self._get_cur_version, args=(path, q,))
-        #p.start()
-        #p.join()
-        # MAA当前版本 self.cur_version
-        #self.cur_version = q.get()
         Asst.load(path=path)
         asst = Asst()
         self.cur_version = asst.get_version()
+        time.sleep(0.05)    # 不加这行有可能会一直加载
 
     @staticmethod
     def map_version_type(version):

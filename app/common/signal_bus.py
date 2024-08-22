@@ -11,10 +11,11 @@ class SignalBus(QObject):
     taskSettingClicked = Signal(str)
 
     maaCoreStatus = Signal(int)
-    maaCoreLoaded = Signal(bool)
+    maaCoreLoaded = Signal(tuple)
     maaCoreUpdated = Signal()
     maaCoreUnready = Signal()
     instanceStatusChanged = Signal(int)
+    instanceStop = Signal(str)
 
     instanceMessage = Signal(tuple)
     poolMessage = Signal(tuple)

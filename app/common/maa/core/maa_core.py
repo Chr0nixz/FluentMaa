@@ -43,14 +43,19 @@ class UpdateLoadThread(QThread):
     def run(self):
         try:
             mutex.lock()
-            updater = Updater(self.path, Version.Nightly)
-            self.updater = updater
+            maaCore.setStatus(MaaCore.Status.UPDATING)
+            self.updater = Updater(self.path, Version.Nightly)
             self.updater.update()
+            maaCore.setStatus(MaaCore.Status.LOADING)
             importlib.reload(asst)
-            signalBus.maaCoreLoaded.emit(asst.Asst.load(self.path))
+            result = asst.Asst.load(self.path)
+            if result:
+                signalBus.maaCoreLoaded.emit((1, 'Success'))
+            else:
+                signalBus.maaCoreLoaded.emit((0, 'Failed'))
             mutex.unlock()
         except Exception as e:
-            print(e)
+            signalBus.maaCoreLoaded.emit((2, e))
 
 
 class MaaCore:
@@ -95,10 +100,12 @@ def printCallback(msg, details, arg):
 
     print(m, d, arg)
 
+
 @Asst.CallBackType
 def signalCallback(msg, details, arg):
     m = Message(msg)
     d = json.loads(details.decode('utf-8'))
     signalBus.instanceMessage.emit((m, d))
+
 
 maaCore = MaaCore()

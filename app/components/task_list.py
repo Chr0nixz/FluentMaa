@@ -1,10 +1,14 @@
+from dataclasses import asdict
+
 from PySide6.QtGui import QColor, Qt
 from PySide6.QtWidgets import QListWidgetItem, QWidget, QHBoxLayout, QVBoxLayout
 from qfluentwidgets import ListWidget, StrongBodyLabel, TransparentPushButton, TransparentToolButton, FluentIcon, \
     SubtitleLabel
 
+from app.common import windows_manager
 from app.common.maa.instance.maa_instance_manager import maaInstanceManager
 from app.common.signal_bus import signalBus
+from app.view.task_detail_message_box import TaskDetailMessageBox
 
 
 class TaskListWidget(ListWidget):
@@ -66,6 +70,7 @@ class TaskItemWidget(QWidget):
         self.hBoxLayout.addWidget(self.taskButton, alignment=Qt.AlignmentFlag.AlignLeft)
         self.hBoxLayout.addWidget(self.removeButton, alignment=Qt.AlignmentFlag.AlignRight)
 
+        self.taskButton.clicked.connect(self.showDetail)
         self.removeButton.clicked.connect(self.remove)
 
         self.setLayout(self.hBoxLayout)
@@ -76,6 +81,15 @@ class TaskItemWidget(QWidget):
 
     def remove(self):
         signalBus.taskListRemoved.emit((self.index, self.task))
+
+    def showDetail(self):
+        w = TaskDetailMessageBox(self.index, self.task, windows_manager.main_window)
+        if w.exec():
+            maaInstanceManager.updateTaskCur(w.index, w.getTask())
+            self.refreshTask()
+
+    def refreshTask(self):
+        self.task = maaInstanceManager.getTaskCur(self.index)
 
 
 class TaskListView(QWidget):
