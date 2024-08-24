@@ -1,10 +1,9 @@
 import os
-import subprocess
 
 from lxml import etree
 
 rcc_path = '../.venv/Scripts/pyside6-rcc.exe'
-exclude_files = ['resources.qrc, resources.py']
+exclude_files = ['resources.qrc', 'resources.py']
 
 script_path = os.getcwd()
 resources_folder = os.path.join(os.path.dirname(script_path), 'app/resources')
@@ -14,6 +13,7 @@ resources_files = []
 
 for root, dirs, files in os.walk(resources_folder):
     for file in files:
+        print(file)
         if file in exclude_files:
             continue
         resources_paths.append(os.path.join(root, file))

@@ -30,8 +30,25 @@ class RecruitConfig:
 @dataclass
 class InfrastConfig:
     enable: bool = True
-    confirm: List[int] = field(default_factory=list)
+    facility: List[int] = field(default_factory=lambda: ["Mfg", "Trade", "Power", "Control", "Reception", "Office", "Dorm"])
     drones: str = '_NotUse'
+    threshold: float = 0.3
+
+
+@dataclass
+class MallConfig:
+    enable: bool = True
+    shopping: bool = True
+
+
+@dataclass
+class AwardConfig:
+    enable: bool = True
+    award: bool = True
+    mail: bool = True
+    recruit: bool = False
+    orundum: bool = False
+    mining: bool = False
 
 
 @dataclass
@@ -40,6 +57,8 @@ class TaskConfig:
     fight: FightConfig
     recruit: RecruitConfig
     infrast: InfrastConfig
+    mall: MallConfig
+    award: AwardConfig
 
     @classmethod
     def of(
@@ -47,6 +66,8 @@ class TaskConfig:
             startup=StartUpConfig(),
             fight=FightConfig(),
             recruit=RecruitConfig(),
-            infrast=InfrastConfig()
+            infrast=InfrastConfig(),
+            mall=MallConfig(),
+            award=AwardConfig()
     ):
-        return cls(startup, fight, recruit, infrast)
+        return cls(startup, fight, recruit, infrast, mall, award)

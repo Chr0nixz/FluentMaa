@@ -2,6 +2,7 @@ from qfluentwidgets import FluentIcon
 
 from app.common.maa.config.maa_task_config import RecruitConfig
 from app.components.setting_cards.spin_box_setting_card import SpinBoxSettingCard
+from app.components.setting_cards.switch_button_setting_card import SwitchButtonSettingCard
 from app.components.task_setting_views.task_setting_view import TaskSettingView, TaskSettingInterface
 
 
@@ -18,7 +19,17 @@ class RecruitSettingView:
         basicInterface.addCard(
             SpinBoxSettingCard(
                 icon=FluentIcon.SETTING,
-                title=self.parent.tr('Max times')
+                title=self.parent.tr('Max times'),
+                config=config,
+                name='times'
+            )
+        )
+        basicInterface.addCard(
+            SwitchButtonSettingCard(
+                icon=FluentIcon.SETTING,
+                title=self.parent.tr('Enable refresh'),
+                config=config,
+                name='refresh'
             )
         )
         basicInterface.initLayout()

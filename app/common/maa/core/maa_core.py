@@ -38,24 +38,25 @@ class UpdateLoadThread(QThread):
     def __init__(self, path):
         super().__init__()
         self.path = path
-        self.updater = None
 
     def run(self):
         try:
             mutex.lock()
             maaCore.setStatus(MaaCore.Status.UPDATING)
-            self.updater = Updater(self.path, Version.Nightly)
-            self.updater.update()
+            Updater(self.path, Version.Nightly).update()
             maaCore.setStatus(MaaCore.Status.LOADING)
             importlib.reload(asst)
             result = asst.Asst.load(self.path)
             if result:
                 signalBus.maaCoreLoaded.emit((1, 'Success'))
+                maaCore.setStatus(MaaCore.Status.RUNNING)
             else:
                 signalBus.maaCoreLoaded.emit((0, 'Failed'))
+                maaCore.setStatus(MaaCore.Status.STOP)
             mutex.unlock()
         except Exception as e:
             signalBus.maaCoreLoaded.emit((2, e))
+            maaCore.setStatus(MaaCore.Status.RUNNING)
 
 
 class MaaCore:
@@ -69,7 +70,6 @@ class MaaCore:
         self.status = MaaCore.Status.STOP
         self.path = cfg.maaFolder.value
 
-        signalBus.maaCoreLoaded.connect(self._onMaaCoreLoaded)
 
     def init(self, update=True):
         if not os.path.isfile(os.path.join(self.path, 'MaaCore.dll')):
@@ -86,11 +86,9 @@ class MaaCore:
         if self.status == MaaCore.Status.STOP:
             signalBus.maaCoreLoaded.emit(False)
 
-    def _onMaaCoreLoaded(self, loaded):
-        if loaded:
-            self.setStatus(MaaCore.Status.RUNNING)
-        else:
-            pass
+    def getVersion(self):
+        return Asst().get_version()
+
 
 
 @Asst.CallBackType

@@ -1,7 +1,6 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
   <qresource>
-    <file>resources.qrc</file>
     <file>i18n\maa.zh_CN.qm</file>
     <file>i18n\maa.zh_CN.ts</file>
     <file>images\gui_logo.png</file>
@@ -13,6 +12,7 @@
     <file>images\icon\mumu_emulator.ico</file>
     <file>qss\dark\home_interface.qss</file>
     <file>qss\dark\link_card.qss</file>
+    <file>qss\dark\loading_bar.qss</file>
     <file>qss\dark\maa_instance_card.qss</file>
     <file>qss\dark\maa_instance_interface.qss</file>
     <file>qss\dark\setting_interface.qss</file>
@@ -26,5 +26,7 @@
     <file>qss\light\setting_interface.qss</file>
     <file>qss\light\splitter.qss</file>
     <file>qss\light\task_setting_view.qss</file>
+    <file>svg\warning_black.svg</file>
+    <file>svg\warning_white.svg</file>
   </qresource>
 </RCC>

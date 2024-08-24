@@ -33,7 +33,7 @@ LoadingBar[type="Error"] {
     background-color: rgb(253, 231, 233);
 }
 
-LoadingBarCloseButton {
+InfoBarCloseButton {
     background-color: transparent;
     border-radius: 5px;
 }
@@ -42,6 +42,6 @@ InfoBarCloseButton:hover {
     background-color: rgba(0, 0, 0, 9);
 }
 
-LoadingBarCloseButton:pressed {
+InfoBarCloseButton:pressed {
     background-color: rgba(0, 0, 0, 6);
 }

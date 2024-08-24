@@ -1,10 +1,12 @@
 from PySide6.QtCore import Qt, QRectF
 from PySide6.QtGui import QPixmap, QPainter, QPainterPath, QLinearGradient, QColor, QBrush
 from PySide6.QtWidgets import QWidget, QVBoxLayout, QLabel
-from qfluentwidgets import FluentIcon, ScrollArea, isDarkTheme, Action, CommandBar
+from qfluentwidgets import FluentIcon, ScrollArea, isDarkTheme
 
 from app.common.resource_manager import resource
 from app.common.style_sheet import StyleSheet
+from app.components.card_flow_view import CardFlowView
+from app.components.core_status_card import CoreStatusCard
 from app.components.link_card import LinkCardView
 
 
@@ -81,6 +83,8 @@ class HomeInterface(ScrollArea):
         self.banner = BannerWidget(self)
         self.view = QWidget(self)
         self.vBoxLayout = QVBoxLayout(self.view)
+        self.panelWidget = CardFlowView(self.tr('Panel'), self)
+        self.panelWidget.addCard(CoreStatusCard(self))
 
         self.__initWidget()
 
@@ -96,6 +100,7 @@ class HomeInterface(ScrollArea):
         self.vBoxLayout.setContentsMargins(0, 0, 0, 36)
         self.vBoxLayout.setSpacing(40)
         self.vBoxLayout.addWidget(self.banner)
+        self.vBoxLayout.addWidget(self.panelWidget)
         self.vBoxLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
     def emerge(self):

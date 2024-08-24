@@ -10,7 +10,7 @@ from app.common.signal_bus import signalBus
 class InstanceStatus(Enum):
     STOP = 0
     RUNNING = 1
-    ERROR = 2
+    ERROR = -1
 
 
 class MaaInstance:

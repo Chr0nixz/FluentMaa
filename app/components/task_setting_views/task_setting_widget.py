@@ -4,6 +4,7 @@ from app.common.maa.config.maa_task_config import TaskConfig
 from app.common.maa.instance.maa_instance_manager import maaInstanceManager
 from app.common.signal_bus import signalBus
 from app.components.task_setting_views.fight_setting_view import FightSettingView
+from app.components.task_setting_views.infrast_setting_view import InfrastSettingView
 from app.components.task_setting_views.recruit_setting_view import RecruitSettingView
 from app.components.task_setting_views.startup_setting_view import StartUpSettingView
 
@@ -19,6 +20,7 @@ class TaskSettingWidget(QStackedWidget):
             self.addWidget(StartUpSettingView(self).getWidget(config.startup))
             self.addWidget(FightSettingView(self).getWidget(config.fight))
             self.addWidget(RecruitSettingView(self).getWidget(config.recruit))
+            self.addWidget(InfrastSettingView(self).getWidget(config.infrast))
         signalBus.taskSettingClicked.connect(self.switchWidget)
 
     def addWidget(self, w):

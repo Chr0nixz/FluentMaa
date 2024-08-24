@@ -217,7 +217,7 @@ class MaaInstanceCardView(QWidget):
         self.flowLayout.removeWidget(card)
         w = InfoBar.warning(
             title=self.tr('Removed'),
-            content=self.tr('Instance: ') + str(card),
+            content=self.tr('Instance') + ': ' + str(card),
             orient=Qt.Horizontal,
             isClosable=True,
             position=InfoBarPosition.BOTTOM_RIGHT,

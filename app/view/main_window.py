@@ -114,6 +114,7 @@ class MainWindow(FluentWindow):
                     position=InfoBarPosition.BOTTOM_RIGHT,
                     parent=self
                 )
+        print(w.styleSheet())
         w.show()
 
     def onMaaCoreUnready(self):
@@ -128,7 +129,7 @@ class MainWindow(FluentWindow):
 
     def showLoadingBar(self):
         w = LoadingBar(
-            title=self.tr('Loading Maa'),
+            title=self.tr('Checking Update'),
             content=self.tr('Please wait'),
             orient=Qt.Orientation.Horizontal,
             parent=self
